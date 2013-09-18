@@ -421,6 +421,37 @@ global.Offices =
 		}]
 	},
 	
+	"цмт":
+	{
+		"id": "CMT",
+		"title": "ЦМТ",
+			
+		"router":
+		{
+			"ip": "192.168.207.65"
+		},
+
+		"switch":
+		{
+			"ip": "192.168.207.66"
+		},
+		
+		"phones":
+		{
+			"gateway": "192.168.207.161"
+		},
+
+		"internet":
+		[{
+			"title": "Virgin",
+			"ip": "81.88.212.234"
+		},
+		{
+			"title": "No",
+			"ip": "0.0.0.0"
+		}]
+	},
+	
 	"белгород":
 	{
 		"id": "Belgorod",
@@ -454,26 +485,59 @@ global.Offices =
 		}]
 	},
 	
+	"смоленск":
+	{
+		"id": "Smolensk",
+		"title": "Смоленск",
+		
+		"city": "Смоленск",
+		
+		"router":
+		{
+			"ip": "192.168.67.1"
+		},
+		
+		"switch":
+		{
+			"ip": "192.168.67.2"
+		},
+		
+		"phones":
+		{
+			"gateway": "192.168.67.129"
+		},
+
+		"internet":
+		[{
+			"title": "Smoltelecom",
+			"ip": "92.241.107.54"
+		},
+		{
+			"title": "MAN net",
+			"ip": "88.135.48.87"
+		}]
+	},
+	
 	"смоленск (николаева)":
 	{
-		"id": "Smolensk (Nikolaeva)",
+		"id": "Smolensk_Nikolaeva",
 		"title": "Смоленск (Николаева)",
 		
 		"city": "Смоленск",
 		
 		"router":
 		{
-			"ip": "10.0.4.30"
+			"ip": "192.168.67.65"
 		},
 		
 		"switch":
 		{
-			"ip": null
+			"ip": "192.168.67.66"
 		},
 		
 		"phones":
 		{
-			"gateway": "10.0.4.30"
+			"gateway": "192.168.67.161"
 		},
 
 		"internet":
@@ -487,36 +551,32 @@ global.Offices =
 		}]
 	},
 	
-	"смоленск":
+	"смоленск (коммунистическая)":
 	{
-		"id": "Smolensk",
-		"title": "Смоленск",
+		"id": "Smolensk_Kommunisticheskaya",
+		"title": "Смоленск (Коммунистическая)",
 		
 		"city": "Смоленск",
 		
 		"router":
 		{
-			"ip": "10.0.8.30"
+			"ip": "192.168.67.97"
 		},
 		
 		"switch":
 		{
-			"ip": null
+			"ip": "192.168.67.98"
 		},
 		
 		"phones":
 		{
-			"gateway": "10.0.8.94"
+			"gateway": "192.168.67.177"
 		},
 
 		"internet":
 		[{
 			"title": "Smoltelecom",
-			"ip": "92.241.107.54"
-		},
-		{
-			"title": "MAN net",
-			"ip": "88.135.48.87"
+			"ip": "92.241.98.30"
 		}]
 	},
 	
@@ -556,7 +616,7 @@ global.Offices =
 	"петроград":
 	{
 		"id": "Petrograd",
-		"title": "Петроград",
+		"title": "Петербург",
 		
 		"city": "Петроград",
 		
@@ -586,6 +646,39 @@ global.Offices =
 		{
 			"title": "Beeline",
 			"ip": "195.190.96.30"
+		}]
+	},
+	
+	"петроград (на невском)":
+	{
+		"id": "Petrograd_na_Nevskom",
+		"title": "Петербург (на Невском)",
+		
+		"city": "Петроград",
+		
+		"router":
+		{
+			"ip": "192.168.98.65"
+		},
+		
+		"switch":
+		{
+			"ip": "192.168.98.66"
+		},
+		
+		"phones":
+		{
+			"gateway": "192.168.98.161"
+		},
+
+		"internet":
+		[{
+			"title": "Прометей",
+			"ip": "78.140.206.174"
+		},
+		{
+			"title": "West Call",
+			"ip": "109.167.228.39"
 		}]
 	},
 		

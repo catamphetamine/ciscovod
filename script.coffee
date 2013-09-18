@@ -1,18 +1,36 @@
-module.exports = (data) ->
-	$$ [
-		'configure terminal',
+module.exports = (data, end) ->
+	###
+	$ 'show run | sec ephone', (ephones) ->
+
+		the_phones = []
 		
-		'voice service voip',
-		'ip address trusted list',
-		'ipv4 10.101.0.1',
-		'ipv4 10.101.0.3',
-		'allow-connections h323 to h323',
- 		'allow-connections h323 to sip',
- 		'allow-connections sip to h323',
- 		'supplementary-service h450.12',
- 		'redirect ip2ip',
+		ephone = null
+		
+		for line in ephones.split('\r\n')
+			if line.starts_with('ephone  ')
+				ephone = line
+			if line.starts_with(' type 6911')
+				the_phones.push(ephone)
+				ephone = null
 
-		'do write'
+		commands = [
+			'configure terminal',
+			
+			'ephone-template 2',
+			'feature-button 1 GPickUp'
+		]
+		
+		for phone in the_phones
+			commands.push(phone)
+			commands.push('ephone-template 2')
+			
+		commands.push('do write')
+			
+		console.log(commands)
+		
+		$$ commands
+	###
+
+	$$ [
+		'configure terminal'
 	]
-	
-

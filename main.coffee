@@ -1,4 +1,5 @@
 require './files/offices.js'
+require './files/bankomats.js'
 require './files/date.js'
 
 cisco_shell = require './../cisco_shell/cisco shell'
@@ -13,8 +14,6 @@ Ssh_options =
 	port: 22
 	username: process.env.BACKUP_CISCO_CONFIGURATION_USERNAME
 	password: process.env.BACKUP_CISCO_CONFIGURATION_PASSWORD
-
-console.log(Ssh_options)
 
 backup_configuration = (options) ->
 	office = options.device.office
@@ -90,26 +89,37 @@ expand_devices = (office, what) ->
 				return [office[what]]
 			else if office.switches?
 				return office.switches
-
+				
 read_parameters = ->
-	offices = []
+	devices = []
 		
-	office = process.argv.shift()
+	parameter = process.argv.shift()
 	
-	if office? && office != 'all'
-		the_office = Offices[office]
-		
-		if not the_office?
-			throw 'Office not found: ' + office
+	if parameter == 'bankomat'
+		for id, bankomat of Bankomats
+			devices.push({ what: 'bankomat', device: bankomat })
 			
-		offices.push(the_office)
+		Ssh_options.password = process.env.BACKUP_CISCO_CONFIGURATION_BANKOMAT_PASSWORD
 	else
-		for key, office of Offices
-			offices.push(office)
-		
-	what = 'router'
+		office = parameter
 	
-	if office?
+		what = 'router'
+		
+		offices = []
+	
+		switch office
+			when 'all'
+				for key, office of Offices
+					offices.push(office)
+					
+			else
+				the_office = Offices[office]
+				
+				if not the_office?
+					throw 'Office not found: ' + office
+					
+				offices.push(the_office)
+	
 		what_parameter = process.argv.shift()
 		
 		if what_parameter?
@@ -121,44 +131,41 @@ read_parameters = ->
 					console
 				when 'everything'
 					console
+				when 'bankomat'
+					console
 				else
 					throw 'Invalid what parameter: ' + what_parameter
 					
 			what = what_parameter
 
-	devices = []
+		switch what
+			when 'router'
+				for office in offices
+					for device in expand_devices(office, what)
+						devices.push({ office: office, device: device, what: what })
+						
+			when 'switch'
+				for office in offices
+					for device in expand_devices(office, what)
+						devices.push({ office: office, device: device, what: what })
+						
+			when 'everything'
+				for office in offices
+					for device in expand_devices(office, 'router')
+						devices.push({ office: office, device: device, what: 'router' })
+					for device in expand_devices(office, 'switch')
+						devices.push({ office: office, device: device, what: 'switch' })
+				
+	return devices
 
-	switch what
-		when 'router'
-			for office in offices
-				for device in expand_devices(office, what)
-					devices.push({ office: office, device: device, what: what })
-					
-		when 'switch'
-			for office in offices
-				for device in expand_devices(office, what)
-					devices.push({ office: office, device: device, what: what })
-					
-		when 'everything'
-			for office in offices
-				for device in expand_devices(office, 'router')
-					devices.push({ office: office, device: device, what: 'router' })
-				for device in expand_devices(office, 'switch')
-					devices.push({ office: office, device: device, what: 'switch' })
-			
-	parameters =
-		offices: offices
-		what: what
-		devices: devices
-		
-	return parameters
-
-parameters = read_parameters()
+devices = read_parameters()
 	
+console.log(Ssh_options)
+			
 switch action
 	when 'backup'
 		next = ->
-			device = parameters.devices.shift()
+			device = devices.shift()
 			
 			if not device?
 				return
@@ -169,7 +176,7 @@ switch action
 		
 	when 'configure'
 		next = ->
-			device = parameters.devices.shift()
+			device = devices.shift()
 			
 			if not device?
 				return
@@ -182,9 +189,13 @@ switch action
 				script_path: './../ciscovod/script'
 				end: next
 				parameters: device
-
+				
+			office_info = ''
+			if device.office?
+				office_info = ' for ' + device.office.title
+				
 			console.log '###################################################################'
-			console.log 'Executing script for ' + device.office.title + ' on ' + device.what + ' ' + device.device.ip
+			console.log 'Executing script' + office_info + ' on ' + device.what + ' ' + device.device.ip
 			console.log '###################################################################'
 
 			cisco_shell(shell_executor_options)

@@ -55,3 +55,10 @@ Array.prototype.is_empty = ->
 	
 String.prototype.has = (what) ->
 	return @indexOf(what) >= 0
+	
+String.prototype.after = (what) ->
+	index = @indexOf(what)
+	if index >= 0
+		return @substring(index + what.length)
+
+	return @
